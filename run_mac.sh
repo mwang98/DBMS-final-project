@@ -1,6 +1,6 @@
 mkdir -m777 /tmp/kapacitor_udf/
 
-sudo brew services start kapacitor 
+sudo brew services restart kapacitor 
 
 sleep 5
 
