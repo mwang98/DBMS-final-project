@@ -1,8 +1,12 @@
 Start InfluxDB, Kapacitor 
-    brew services start influxdb
-    brew services start kapacitor
-    brew services start telegraf
-    influxdb
+    brew services restart influxdb
+    brew services restart kapacitor
+    brew services restart telegraf
+    influx
+
+    chronograf
+    http://localhost:8888
+    
 Path of kapacitor
     /usr/local/opt/kapacitor
 Configuration of kapacitor, telegraf, influxdb
@@ -15,12 +19,13 @@ Configuration of kapacitor, telegraf, influxdb
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Command to define the Kapacitor task (cd to the directory of .tick file)
-    kapacitor define <taksName> -tick <task.tick>
+    kapacitor define print_temps -tick print_temps.tick
 Start the recording in the background
-    kapacitor record stream -task <taksName> -duration 24h -no-wait
+    kapacitor record stream -task print_temps -duration 24h -no-wait
 Store returned ID as rid
-    rid = <returnedID>
+    rid=<returnedID>
 Start to generate data
-    python <dataGenerator.py>
+    python printer_data.py
 Access output by ID
     kapacitor list recordings $rid
+    kapacitor replay -task print_temps -recording $rid -rec-time
