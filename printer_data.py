@@ -92,8 +92,7 @@ def main():
     # Write data to Kapacitor
     r = requests.post(write_url, data='\n'.join(points))
     if r.status_code != 204:
-        # print(r.text, file=sys.stderr)
-        print >> sys.stderr, r.text
+        print(r.text, file=sys.stderr)
         return 1
     return 0
 

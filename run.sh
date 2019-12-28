@@ -17,4 +17,3 @@ kapacitor replay -task print_temps -recording $rid -rec-time
 
 sudo chmod 777 /tmp/kapacitor_udf/*
 cat /tmp/kapacitor_udf/{hotend,bed,air}_failure.log
-
