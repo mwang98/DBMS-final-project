@@ -85,7 +85,7 @@ class SpectralResidualHandler(Handler):
             self._agent.write_response(response)
 
     @staticmethod
-    def detect_anomalies(data: List[float], q=20, z=200):
+    def detect_anomalies(data: List[float], q=20, z=20):
         fft_result = fft(data)
         A = np.abs(fft_result)
         P = np.angle(fft_result)
@@ -98,7 +98,6 @@ class SpectralResidualHandler(Handler):
                 np.exp(R + P * np.complex(0, 1))
             )
         )
-        S_bar = np.convolve(S, np.ones((z,)) / z, mode='same')
-        O = np.abs((S - S_bar) / S_bar)
-        O = O > 1.
+        S_bar = np.convolve(S, np.ones([z]) / z, mode='same')
+        O = np.abs((S - S_bar) / (S_bar + epsilon))
         return O
