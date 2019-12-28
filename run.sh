@@ -2,9 +2,9 @@ mkdir -m777 /tmp/kapacitor_udf/
 
 sudo service kapacitor restart
 
-sleep 5
+sudo sleep 5
 
-kapacitor define print_temps -tick print_temps.tick
+sudo kapacitor define print_temps -tick print_temps.tick
 
 rid=$(kapacitor record stream -task print_temps -duration 24h -no-wait)
 echo $rid

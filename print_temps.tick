@@ -10,8 +10,10 @@ var data = stream
     |from()
         .measurement('temperatures')
     |window()
-        .period(5m)
-        .every(5m)
+        .period(10s)
+        .every(10s)
+        //.period(10s)
+        //.every(10s)
 
 data
     //Run our tTest UDF on the hotend temperature
@@ -22,7 +24,7 @@ data
         .size(3600)
     |alert()
         .id('hotend')
-        .crit(lambda: "pvalue" < 1)
+        .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/hotend_failure.log')
 
 // Do the same for the bed and air temperature.
@@ -32,7 +34,7 @@ data
         .size(3600)
     |alert()
         .id('bed')
-        .crit(lambda: "pvalue" < 1)
+        .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/bed_failure.log')
 
 data
@@ -41,5 +43,5 @@ data
         .size(3600)
     |alert()
         .id('air')
-        .crit(lambda: "pvalue" < 1)
+        .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/air_failure.log')

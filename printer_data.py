@@ -58,7 +58,6 @@ def main():
     epoch = datetime(1970, 1, 1)
 
     # 24 hours of temperatures once per second
-    points = []
     for i in range(60 * 60 * 24 + 2):
         # update sigma values
         if len(hotend_anomalies) > 0 and i == hotend_anomalies[0][0]:
@@ -80,21 +79,19 @@ def main():
         hotend = temp(hotend_t + hotend_offset, hotend_sigma)
         bed = temp(bed_t + bed_offset, bed_sigma)
         air = temp(air_t + air_offset, air_sigma)
-        points.append("%s hotend=%f,bed=%f,air=%f %d" % (
+        point = "%s hotend=%f,bed=%f,air=%f %d" % (
             measurement,
             hotend,
             bed,
             air,
-            time.time() + i,
-        ))
+            time.time(),
+        )
+        time.sleep(1)
+        r = requests.post(write_url, data=point)
+        if r.status_code != 204:
+            print(r.text, file=sys.stderr)
+            return 1
         now += second
-
-    # Write data to Kapacitor
-    r = requests.post(write_url, data='\n'.join(points))
-    if r.status_code != 204:
-        print(r.text, file=sys.stderr)
-        return 1
-    return 0
 
 
 if __name__ == '__main__':
