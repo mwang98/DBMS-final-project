@@ -1,6 +1,5 @@
 from scipy import stats
 import math
-import sys
 
 from kapacitor.udf.agent import Agent, Handler
 from kapacitor.udf import udf_pb2
@@ -156,20 +155,3 @@ class MovingStats(object):
             self.n -= 1
 
         self._window.append(value)
-
-
-if __name__ == '__main__':
-    # Create an agent
-    agent = Agent()
-
-    # Create a handler and pass it an agent so it can write points
-    h = TTestHandler(agent)
-
-    # Set the handler on the agent
-    agent.handler = h
-
-    # Anything printed to STDERR from a UDF process gets captured into the Kapacitor logs.
-    print("Starting agent for TTestHandler", file=sys.stderr)
-    agent.start()
-    agent.wait()
-    print("Agent finished", file=sys.stderr)
