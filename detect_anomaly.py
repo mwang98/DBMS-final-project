@@ -14,7 +14,7 @@ if __name__ == '__main__':
     agent.handler = h
 
     # Anything printed to STDERR from a UDF process gets captured into the Kapacitor logs.
-    print("Starting agent for TTestHandler", file=sys.stderr)
+    print(f"Starting agent for {sys.argv[1]}", file=sys.stderr)
     agent.start()
     agent.wait()
     print("Agent finished", file=sys.stderr)

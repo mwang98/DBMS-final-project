@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 mkdir -m777 /tmp/kapacitor_udf/
-=======
-mkdir /tmp/kapacitor_udf/
->>>>>>> setup everything
 
 sudo service kapacitor restart
 
