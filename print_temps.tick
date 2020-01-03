@@ -12,8 +12,6 @@ var data = stream
     |window()
         .period(10s)
         .every(10s)
-        //.period(10s)
-        //.every(10s)
 
 data
     //Run our tTest UDF on the hotend temperature
