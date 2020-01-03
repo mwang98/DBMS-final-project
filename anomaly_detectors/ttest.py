@@ -1,6 +1,5 @@
 from scipy import stats
 import math
-import sys
 
 from kapacitor.udf.agent import Agent, Handler
 from kapacitor.udf import udf_pb2
@@ -14,13 +13,10 @@ class TTestHandler(Handler):
     """
     def __init__(self, agent):
         self._agent = agent
-
         self._field = ''
         self._history = None
-
         self._batch = None
-
-        self._alpha = 0.0
+        self._alpha = 0.001
 
     def info(self):
         """
@@ -40,10 +36,6 @@ class TTestHandler(Handler):
         # Define an option 'size' that takes one integer argument.
         response.info.options['size'].valueTypes.append(udf_pb2.INT)
 
-        # We need to know the alpha level so that we can ignore bad windows
-        # Define an option 'alpha' that takes one double argument.
-        response.info.options['alpha'].valueTypes.append(udf_pb2.DOUBLE)
-
         return response
 
     def init(self, init_req):
@@ -58,8 +50,6 @@ class TTestHandler(Handler):
                 self._field = opt.values[0].stringValue
             elif opt.name == 'size':
                 size = opt.values[0].intValue
-            elif opt.name == 'alpha':
-                self._alpha = opt.values[0].doubleValue
 
         if size <= 1:
             success = False
@@ -67,9 +57,6 @@ class TTestHandler(Handler):
         if self._field == '':
             success = False
             msg += ' must supply a field name'
-        if self._alpha == 0:
-            success = False
-            msg += ' must supply an alpha value'
 
         # Initialize our historical window
         self._history = MovingStats(size)
@@ -77,7 +64,6 @@ class TTestHandler(Handler):
         response = udf_pb2.Response()
         response.init.success = success
         response.init.error = msg[1:]
-
         return response
 
     def begin_batch(self, begin_req):
@@ -103,7 +89,7 @@ class TTestHandler(Handler):
             response.point.group = batch_meta.group
             response.point.tags.update(batch_meta.tags)
             response.point.fieldsDouble["t"] = t
-            response.point.fieldsDouble["pvalue"] = pvalue
+            response.point.fieldsDouble["pvalue"] = pvalue / self._alpha
             self._agent.write_response(response)
 
         # Update historical stats with batch, but only if it was normal.
@@ -156,20 +142,3 @@ class MovingStats(object):
             self.n -= 1
 
         self._window.append(value)
-
-
-if __name__ == '__main__':
-    # Create an agent
-    agent = Agent()
-
-    # Create a handler and pass it an agent so it can write points
-    h = TTestHandler(agent)
-
-    # Set the handler on the agent
-    agent.handler = h
-
-    # Anything printed to STDERR from a UDF process gets captured into the Kapacitor logs.
-    print("Starting agent for TTestHandler", file=sys.stderr)
-    agent.start()
-    agent.wait()
-    print("Agent finished", file=sys.stderr)

@@ -1,12 +1,3 @@
-Start InfluxDB, Kapacitor 
-    brew services restart influxdb
-    brew services restart kapacitor
-    brew services restart telegraf
-    influx
-
-    chronograf
-    http://localhost:8888
-    
 Path of kapacitor
     /usr/local/opt/kapacitor
 Configuration of kapacitor, telegraf, influxdb

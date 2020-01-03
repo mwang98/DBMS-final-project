@@ -58,9 +58,13 @@ def main():
     epoch = datetime(1970, 1, 1)
 
     # 24 hours of temperatures once per second
+<<<<<<< HEAD
     points = []
     for i in range( 10 + 2 ):
         time.sleep( 1 )
+=======
+    for i in range(60 * 60 * 24 + 2):
+>>>>>>> master
         # update sigma values
         if len(hotend_anomalies) > 0 and i == hotend_anomalies[0][0]:
             hotend_sigma = hotend_anomalies[0][1]
@@ -81,14 +85,28 @@ def main():
         hotend = temp(hotend_t + hotend_offset, hotend_sigma)
         bed = temp(bed_t + bed_offset, bed_sigma)
         air = temp(air_t + air_offset, air_sigma)
+<<<<<<< HEAD
         # timeStamp = time.time()  + i
         points.append("%s hotend=%f,bed=%f,air=%f %d" % (
+=======
+        point = "%s hotend=%f,bed=%f,air=%f %d" % (
+>>>>>>> master
             measurement,
             hotend,
             bed,
             air,
+<<<<<<< HEAD
             time.time()
         ))
+=======
+            time.time(),
+        )
+        time.sleep(1)
+        r = requests.post(write_url, data=point)
+        if r.status_code != 204:
+            print(r.text, file=sys.stderr)
+            return 1
+>>>>>>> master
         now += second
         r = requests.post(write_url, data='\n'.join(points))
         if r.status_code != 204:
@@ -96,6 +114,7 @@ def main():
             print >> sys.stderr, r.text
             return 1
 
+<<<<<<< HEAD
     # Write data to Kapacitor
     # r = requests.post(write_url, data='\n'.join(points))
     # if r.status_code != 204:
@@ -104,6 +123,8 @@ def main():
     #     return 1
     return 0
 
+=======
+>>>>>>> master
 
 if __name__ == '__main__':
     exit(main())

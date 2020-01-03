@@ -4,15 +4,14 @@ dbrp "printer"."autogen"
 // and triggers alerts if the temperatures start to experience abnormal behavior.
 
 // Define our desired significance level.
-var alpha = 0.001
 
 // Select the temperatures measurements
 var data = stream
     |from()
         .measurement('temperatures')
     |window()
-        .period(5m)
-        .every(5m)
+        .period(10s)
+        .every(10s)
 
 data
     //Run our tTest UDF on the hotend temperature
@@ -21,11 +20,9 @@ data
         .field('hotend')
         // Keep a 1h rolling window
         .size(3600)
-        // pass in the alpha value
-        .alpha(alpha)
     |alert()
         .id('hotend')
-        .crit(lambda: 0 < 1)
+        .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/hotend_failure.log')
 
 // Do the same for the bed and air temperature.
@@ -33,20 +30,18 @@ data
     @tTest()
         .field('bed')
         .size(3600)
-        .alpha(alpha)
     |alert()
         .id('bed')
-        .crit(lambda: 0 < 1)
+        .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/bed_failure.log')
 
 data
     @tTest()
         .field('air')
         .size(3600)
-        .alpha(alpha)
     |alert()
         .id('air')
-        .crit(lambda:0 < 1)
+        .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/air_failure.log')
 
 // store data to influxdb
@@ -59,3 +54,4 @@ data
         .tag('hotend', 'a')
         .tag('bed', 'b')
         .tag('air', 'c')
+        
