@@ -13,7 +13,7 @@ Configuration of kapacitor, telegraf, influxdb
     /usr/local/etc
 
 !!!!!Change kapacitor.conf!!!!!
-    python program : prog = "/usr/local/bin/python2"
+    python program : prog = "/usr/local/bin/python3"
     args = ["-u", <pathOfUDF.py>]
     pathOfKapacitor : PYTHONPATH = "/usr/local/opt/kapacitor/kapacitor/udf/agent/py"
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -43,7 +43,7 @@ or
 ```shell script
 sudo systemctl status <influxdb/kapacitor/telegraf>
 ```
-###
+##
 
 ### Instructions
 
@@ -97,3 +97,22 @@ You can run `bash run.sh` directly, detailed descriptions are below.
     ```shell script
     cat /tmp/kapacitor_udf/{hotend,bed,air}_failure.log
     ```
+
+
+
+### Instruction to connect all staff
+
+1. Start `InfluxDB`, `Kapacitor`, `Chronograf`, `Telegraf`
+
+```shell 
+brew services restart influxdb
+brew services restart kapacitor
+brew services restart telegraf
+brew services restart chronograf
+```
+
+2. `Chronograf` render on the port `http://localhost:8888`
+3. 
+
+
+

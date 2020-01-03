@@ -25,7 +25,7 @@ data
         .alpha(alpha)
     |alert()
         .id('hotend')
-        .crit(lambda: "pvalue" < alpha)
+        .crit(lambda: 0 < 1)
         .log('/tmp/kapacitor_udf/hotend_failure.log')
 
 // Do the same for the bed and air temperature.
@@ -36,7 +36,7 @@ data
         .alpha(alpha)
     |alert()
         .id('bed')
-        .crit(lambda: "pvalue" < alpha)
+        .crit(lambda: 0 < 1)
         .log('/tmp/kapacitor_udf/bed_failure.log')
 
 data
@@ -46,5 +46,16 @@ data
         .alpha(alpha)
     |alert()
         .id('air')
-        .crit(lambda: "pvalue" < alpha)
+        .crit(lambda:0 < 1)
         .log('/tmp/kapacitor_udf/air_failure.log')
+
+// store data to influxdb
+data
+    |influxDBOut()
+        .create()
+        .database('Mike')
+        .retentionPolicy('autogen')
+        .measurement('temperatures')
+        .tag('hotend', 'a')
+        .tag('bed', 'b')
+        .tag('air', 'c')
