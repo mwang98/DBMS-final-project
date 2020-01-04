@@ -10,25 +10,20 @@ class cmdMgr():
 
 
     def defineTask( self, analysisType, argv ):
-        argv['id'] = shortuuid.uuid()
-        task = Task( argv, analysisType )
-        self.tasks.append( copy.deepcopy(task) )
-        dbrp = task.getTick()
-        # return dbrp
-        # return argv['id']
-        
-        # self.tasks.append( Task( argv, analysisType ) )
-        # task = self.tasks[-1]
-        # dbrp = task.getTick()
+        input_arg = copy.deepcopy(argv)
+        input_arg ['id'] = shortuuid.uuid()
 
-        print(task)
-        return dbrp
+        self.tasks.append( Task( input_arg, analysisType ) )
+        task = self.tasks[-1]
+        dbrp = task.getTick()
+        task.define()
+
+        return input_arg ['id']
     
     
     def execTask( self, id ):
         tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
         task  = tasks[0]
-        task.define()
         task.enable()
 
     def stopTask( self, id ):
@@ -79,21 +74,21 @@ def main():
     print("----------------")
     mgr.listTasks()
 
-    # mgr.execTask(ids[0])
-    # mgr.listTasks()
-    # os.system("kapacitor list tasks")
+    mgr.execTask(ids[0])
+    mgr.listTasks()
+    os.system("kapacitor list tasks")
 
-    # mgr.modifyTask(ids[0], modified_obj) 
-    # mgr.listTasks()
-    # os.system("kapacitor list tasks")
+    mgr.modifyTask(ids[0], modified_obj) 
+    mgr.listTasks()
+    os.system("kapacitor list tasks")
 
-    # mgr.stopTask(ids[0])
-    # mgr.listTasks()
-    # os.system("kapacitor list tasks")
+    mgr.stopTask(ids[0])
+    mgr.listTasks()
+    os.system("kapacitor list tasks")
 
-    # mgr.deleteTask(ids[0])
-    # mgr.listTasks()
-    # os.system("kapacitor list tasks")
+    mgr.deleteTask(ids[0])
+    mgr.listTasks()
+    os.system("kapacitor list tasks")
 
 
 if __name__ == '__main__':
