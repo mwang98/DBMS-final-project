@@ -24,7 +24,10 @@ logger = logging.getLogger()
 # The Handler is called from a single thread, meaning methods will not be called concurrently.
 #
 # To write Points/Batches back to the Agent/Kapacitor use the Agent.write_response method, which is thread safe.
-class Handler(object):
+
+
+class Handler:
+
     def info(self):
         pass
 
@@ -32,7 +35,7 @@ class Handler(object):
         pass
 
     def snapshot(self):
-        pass
+        return udf_pb2.Response()
 
     def restore(self, restore_req):
         pass
