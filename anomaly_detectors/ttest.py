@@ -41,6 +41,7 @@ class TTestDetector(BaseDetector):
             response = {
                 'pvalue': pvalue,
                 't': t,
+                'is_anomaly': pvalue < self.alpha,
             }
             should_response = True
 

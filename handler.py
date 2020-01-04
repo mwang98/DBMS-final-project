@@ -1,6 +1,8 @@
 import sys
 import json
 
+import numpy as np
+
 from kapacitor.udf.agent import Agent, Handler
 from kapacitor.udf import udf_pb2
 
@@ -95,6 +97,8 @@ class CustomHandler(Handler):
                     response.point.fieldsInt[key] = value
                 elif isinstance(value, float):
                     response.point.fieldsDouble[key] = value
+                elif isinstance(value, (bool, np.bool_)):
+                    response.point.fieldsBool[key] = bool(value)
                 else:
                     print(f'invalid value key:{key}, value: {value}, type: {type(value)}', file=sys.stderr)
             self._agent.write_response(response)
