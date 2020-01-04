@@ -1,0 +1,33 @@
+dbrp "['T']_zKZHt24zVcaktir2YaGvTK"."autogen"
+var data = stream
+    |from()
+        .measurement('['M']')
+    |window()
+        .period(10s)
+        .every(10s)
+
+data
+    @tTest()
+        // specify the hotend field
+        .field('['F']')
+        // Keep a 1h rolling window
+        .size(3600)
+    |alert()
+        .id('['F']')
+        .crit(lambda: 0 < 100)
+        .log('/tmp/kapacitor_udf/['T']_zKZHt24zVcaktir2YaGvTK_failure.log')
+        |influxDBOut()
+            .database('['D']')
+            .retentionPolicy('autogen')
+            .measurement('['T']_zKZHt24zVcaktir2YaGvTK_alert')
+    
+data
+    |influxDBOut()
+        .create()
+        .database('['D']')
+        .retentionPolicy('autogen')
+        .measurement('['T']_zKZHt24zVcaktir2YaGvTK')
+        .tag('hotend', 'a')
+        .tag('bed', 'b')
+        .tag('air', 'c')
+
