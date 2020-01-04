@@ -13,8 +13,7 @@ class cmdMgr():
         self.tasks.append( copy.deepcopy(task) )
         dbrp = task.getTick()
         task.defineTask()
-        # return dbrpkap
-        return argv['id']
+        return dbrp
     
     
     def execTask( self, id ):
@@ -55,13 +54,6 @@ def main():
         idx = mgr.defineTask('ttest', obj)
         ids.append(idx)
     print(" ")
-    mgr.listTasks()
-    mgr.execTask(ids[-1])
-    mgr.listTasks()
-    mgr.stopTask(ids[-1])
-    mgr.listTasks()
-    mgr.deleteTask(ids[-1])
-    mgr.listTasks()
 
 if __name__ == '__main__':
     main()  
