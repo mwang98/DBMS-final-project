@@ -5,6 +5,7 @@ from defineTask import Task
 class cmdMgr():
     def __init__( self ):
         self.tasks = []
+        self.analysisMethod = ['ttest', 'fft']
 
 
     def defineTask( self, analysisType, argv ):
@@ -38,6 +39,9 @@ class cmdMgr():
         print("="*112)
         for task in self.tasks:
             print( task )
+    
+    def listMethods( self ):
+        return self.analysisMethod
 
 
 obj = {
@@ -45,7 +49,7 @@ obj = {
     "database": "Mike",
     "measurement": "temperature",
     "field": "hotend",
-    "sz_sampling": "100"
+    "size": "3600"
 }
 def main():
     mgr = cmdMgr()
