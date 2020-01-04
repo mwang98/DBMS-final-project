@@ -12,7 +12,7 @@ data
         // specify the hotend field
         .field('{ argv["field"] }')
         // Keep a 1h rolling window
-        .size(3600)
+        .size({ argv["size"] })
     |alert()
         .id('{ argv["field"] }')
         .crit(lambda: 0 < 100)
