@@ -69,7 +69,7 @@ def main():
     mgr = cmdMgr()
     ids  = []
     for i in range(2):
-        idx = mgr.defineTask('ttest', obj)
+        idx = mgr.defineTask('fft', obj)
         ids.append(idx)
     print("----------------")
     mgr.listTasks()
@@ -85,9 +85,10 @@ def main():
     mgr.stopTask(ids[0])
     mgr.listTasks()
     os.system("kapacitor list tasks")
-
+    print( "delete!!")
     mgr.deleteTask(ids[0])
     mgr.listTasks()
+    print( "end!!")
     os.system("kapacitor list tasks")
 
 

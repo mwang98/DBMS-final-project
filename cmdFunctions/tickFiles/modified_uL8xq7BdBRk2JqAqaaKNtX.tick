@@ -1,0 +1,33 @@
+dbrp "modified_uL8xq7BdBRk2JqAqaaKNtX"."autogen"
+var data = stream
+    |from()
+        .measurement('temperature')
+    |window()
+        .period(10s)
+        .every(10s)
+
+data
+    @tTest()
+        // specify the hotend field
+        .field('hotend')
+        // Keep a 1h rolling window
+        .size(3600)
+    |alert()
+        .id('hotend')
+        .crit(lambda: 0 < 100)
+        .log('/tmp/kapacitor_udf/modified_uL8xq7BdBRk2JqAqaaKNtX_failure.log')
+        |influxDBOut()
+            .database('Mike')
+            .retentionPolicy('autogen')
+            .measurement('modified_uL8xq7BdBRk2JqAqaaKNtX_alert')
+    
+data
+    |influxDBOut()
+        .create()
+        .database('Mike')
+        .retentionPolicy('autogen')
+        .measurement('modified_uL8xq7BdBRk2JqAqaaKNtX')
+        .tag('hotend', 'a')
+        .tag('bed', 'b')
+        .tag('air', 'c')
+

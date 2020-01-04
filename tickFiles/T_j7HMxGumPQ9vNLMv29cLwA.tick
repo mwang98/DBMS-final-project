@@ -1,7 +1,7 @@
-dbrp "['T']_9eJSzbBQkuQcWtCUu8PSiK"."autogen"
+dbrp "T_j7HMxGumPQ9vNLMv29cLwA"."autogen"
 var data = stream
     |from()
-        .measurement('['M']')
+        .measurement('M')
     |window()
         .period(10s)
         .every(10s)
@@ -9,24 +9,24 @@ var data = stream
 data
     @tTest()
         // specify the hotend field
-        .field('['F']')
+        .field('F')
         // Keep a 1h rolling window
         .size(3600)
     |alert()
-        .id('['F']')
+        .id('F')
         .crit(lambda: 0 < 100)
-        .log('/tmp/kapacitor_udf/['T']_9eJSzbBQkuQcWtCUu8PSiK_failure.log')
+        .log('/tmp/kapacitor_udf/T_j7HMxGumPQ9vNLMv29cLwA_failure.log')
         |influxDBOut()
-            .database('['D']')
+            .database('D')
             .retentionPolicy('autogen')
-            .measurement('['T']_9eJSzbBQkuQcWtCUu8PSiK_alert')
+            .measurement('T_j7HMxGumPQ9vNLMv29cLwA_alert')
     
 data
     |influxDBOut()
         .create()
-        .database('['D']')
+        .database('D')
         .retentionPolicy('autogen')
-        .measurement('['T']_9eJSzbBQkuQcWtCUu8PSiK')
+        .measurement('T_j7HMxGumPQ9vNLMv29cLwA')
         .tag('hotend', 'a')
         .tag('bed', 'b')
         .tag('air', 'c')
