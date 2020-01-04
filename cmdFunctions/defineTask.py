@@ -18,12 +18,12 @@ class Task():
         self.log_path    = f"{ LOG_PATH    }{ self.tick_name }_failure.log"
     
     def __del__( self ):
-        myCmd = f"kapacitor delete tasks {self.tick_name}"
-        os.system( myCmd )
+        os.system( f"kapacitor delete tasks {self.tick_name}" )
+        os.system( f"rm -f {self.tick_path} {self.log_path}" )
         print(f"{self.tick_name} is removed.")
 
     def __str__( self ):
-        color =  "green" if self.status else "red"
+        color = "green" if self.status else "red"
         return "{:<15} {:<15} {:<15} {:<15} {:<15} {:<25} {:<15}". \
                 format(self.info['taskName'], self.type, self.info['database'], self.info['measurement'], self.info['field'], self.info['id'], colored(str(self.status), color))
 
@@ -40,33 +40,37 @@ class Task():
             except OSError as e:
                 print("Failed to create the directory: {e}".format(e))
 
-        if not os.path.exists( self.tick_path ):
-            tick = open( self.tick_path, 'w' )
+        tick = open( self.tick_path, 'w' )
 
-            if self.type == 'ttest':
-                content = ttest( self.tick_name, self.info, self.log_path )    
-            elif self.type == 'fft':
-                content = fft  ( self.tick_name, self.info, self.log_path )
+        if self.type == 'ttest':
+            content = ttest( self.tick_name, self.info, self.log_path )    
+        elif self.type == 'fft':
+            content = fft  ( self.tick_name, self.info, self.log_path )
 
-            tick.write( content )
-            tick.close()
+        tick.write( content )
+        tick.close()
 
-        # print( f"{self.tick_path} file has been created ")
         return dbrt
 
-    def defineTask( self ):
-        myCmd = f"kapacitor define {self.tick_name} -tick {self.tick_path}"
-        os.system( myCmd )
+    def define( self ):
+        os.system( f"kapacitor define {self.tick_name} -tick {self.tick_path}" )
     
-    def enableTask( self ):
-        myCmd = f"kapacitor enable {self.tick_name}"
-        os.system( myCmd )
+    def enable( self ):
+        os.system( f"kapacitor enable {self.tick_name}" )
         self.status = True
     
-    def disableTask( self ):
-        myCmd = f"kapacitor disable {self.tick_name}"
-        os.system( myCmd )
+    def disable( self ):
+        os.system( f"kapacitor disable {self.tick_name}" )
         self.status = False
-    
-    def deleteTask( self ):
-        del self
+
+    def modify( self, argv ):
+        os.system( f"kapacitor delete tasks {self.tick_name}" )
+        os.system( f"rm -f {self.tick_path} {self.log_path}" )
+
+        for key, value in argv.items():
+            self.info[ key ] = value
+
+        self.tick_name = f"{ self.info['taskName'] }_{ self.info['id'] }"
+        self.tick_path = f"{ OUTPUT_PATH }{ self.tick_name }.tick"
+        self.log_path  = f"{ LOG_PATH    }{ self.tick_name }_failure.log"
+
