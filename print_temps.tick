@@ -43,3 +43,15 @@ data
         .id('air')
         .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/air_failure.log')
+
+// store data to influxdb
+data
+    |influxDBOut()
+        .create()
+        .database('Mike')
+        .retentionPolicy('autogen')
+        .measurement('temperatures')
+        .tag('hotend', 'a')
+        .tag('bed', 'b')
+        .tag('air', 'c')
+        

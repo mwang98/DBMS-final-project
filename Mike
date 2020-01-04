@@ -19,3 +19,5 @@
         chaining method: 接收到 stream / batch data 後需要執行的動作（same as function）。不同形態的 nodes 之間有特定連接方式
         property method: 修改 nodes 內容並且回傳相同 node 的 reference
         ref: https://docs.influxdata.com/kapacitor/v1.5/nodes/
+3. InfluxQL
+    https://docs.influxdata.com/influxdb/v1.7/query_language/spec/

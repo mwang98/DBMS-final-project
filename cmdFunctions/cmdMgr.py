@@ -1,0 +1,67 @@
+import shortuuid
+import copy
+from defineTask import Task
+
+class cmdMgr():
+    def __init__( self ):
+        self.tasks = []
+
+
+    def defineTask( self, analysisType, argv ):
+        argv['id'] = shortuuid.uuid()
+        task = Task( argv, analysisType )
+        self.tasks.append( copy.deepcopy(task) )
+        dbrp = task.getTick()
+        task.defineTask()
+        # return dbrpkap
+        return argv['id']
+    
+    
+    def execTask( self, id ):
+        tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
+        task  = tasks[0]
+        task.enableTask()
+
+    def stopTask( self, id ):
+        tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
+        task  = tasks[0]
+        task.disableTask()
+
+    def deleteTask( self, id ):
+        tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
+        task  = tasks[0]
+        task.deleteTask()
+        self.tasks.remove( task )
+
+    def listTasks( self ):
+        print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<25} {:<15}". \
+                format("Task Name", "Method", "Database", "Measurement", "Field", "ID", "Status"))
+        print("="*112)
+        for task in self.tasks:
+            print( task )
+
+
+obj = {
+    "taskName": "monitorTemp",
+    "database": "Mike",
+    "measurement": "temperature",
+    "field": "hotend",
+    "sz_sampling": "100"
+}
+def main():
+    mgr = cmdMgr()
+    ids  = []
+    for i in range(10):
+        idx = mgr.defineTask('ttest', obj)
+        ids.append(idx)
+    print(" ")
+    mgr.listTasks()
+    mgr.execTask(ids[-1])
+    mgr.listTasks()
+    mgr.stopTask(ids[-1])
+    mgr.listTasks()
+    mgr.deleteTask(ids[-1])
+    mgr.listTasks()
+
+if __name__ == '__main__':
+    main()  

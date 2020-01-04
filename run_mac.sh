@@ -1,10 +1,19 @@
 mkdir -m777 /tmp/kapacitor_udf/
 
-sudo brew services start kapacitor 
+# sudo brew services restart kapacitor 
 
 sleep 5
 
 sudo kapacitor define print_temps -tick print_temps.tick
+
+# rid=$(kapacitor record stream -task print_temps -duration 10s -no-wait)
+# echo $rid
+
+# python3 printer_data.py
+
+# kapacitor list recordings $rid
+
+# kapacitor replay -task print_temps -recording $rid -rec-time
 
 echo "printing "
 python3 printer_data.py &
