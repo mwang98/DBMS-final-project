@@ -1,8 +1,8 @@
-def ttest( urldb, argv, log_path ):
-    return f"""dbrp "{ urldb }"."autogen"
+def ttest(urldb, argv, log_path):
+    return f"""dbrp "{urldb}"."autogen"
 var data = stream
     |from()
-        .measurement('{ argv["measurement"] }')
+        .measurement('{argv["measurement"]}')
     |window()
         .period(10s)
         .every(10s)
@@ -10,24 +10,24 @@ var data = stream
 data
     @tTest()
         // specify the hotend field
-        .field('{ argv["field"] }')
+        .field('{argv["field"]}')
         // Keep a 1h rolling window
         .size({ argv["size"] })
     |alert()
-        .id('{ argv["field"] }')
+        .id('{argv["field"]}')
         .crit(lambda: 0 < 100)
-        .log('{ log_path }')
+        .log('{log_path}')
         |influxDBOut()
-            .database('{ argv["database"] }')
+            .database('{argv["database"]}')
             .retentionPolicy('autogen')
-            .measurement('{ urldb }_alert')
-    
+            .measurement('{urldb}_alert')
+
 data
     |influxDBOut()
         .create()
-        .database('{ argv["database"] }')
+        .database('{argv["database"]}')
         .retentionPolicy('autogen')
-        .measurement('{ urldb }')
+        .measurement('{urldb}')
         .tag('hotend', 'a')
         .tag('bed', 'b')
         .tag('air', 'c')

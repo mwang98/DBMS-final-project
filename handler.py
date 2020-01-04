@@ -11,7 +11,7 @@ from anomaly_detectors import anomaly_detector_hub
 
 class CustomHandler(Handler):
 
-    def __init__(self, agent):
+    def __init__(self, agent: Agent):
         self._agent = agent
         self.detector = None
 
@@ -100,5 +100,6 @@ class CustomHandler(Handler):
                 elif isinstance(value, (bool, np.bool_)):
                     response.point.fieldsBool[key] = bool(value)
                 else:
-                    print(f'invalid value key:{key}, value: {value}, type: {type(value)}', file=sys.stderr)
+                    print(f'invalid value key:{key}, value: {value}, type: {type(value)}',
+                          file=sys.stderr)
             self._agent.write_response(response)
