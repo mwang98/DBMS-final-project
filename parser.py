@@ -39,8 +39,6 @@ class Parser():
 
         parser_L.add_argument  ( "listname", nargs="+",                 help="choose which list to show",     choices=["method", "task"], type=str.lower)
 
-        self.argparser.parse_args()
-
     def func( self, args ):
         mgr = cmdMgr.cmdMgr()
         if args.subparser_name == "Define":
