@@ -1,8 +1,8 @@
-from .ttest import TTestHandler
-from .spectral_residual import SpectralResidualHandler
+from .ttest import TTestDetector
+from .spectral_residual import SpectralResidualDetector
 
 
 anomaly_detector_hub = {
-    'ttest': TTestHandler,
-    'spectral_residual': SpectralResidualHandler,
+    'ttest': TTestDetector,
+    'spectral_residual': SpectralResidualDetector,
 }

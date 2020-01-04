@@ -1,20 +1,18 @@
-import sys
 from collections import deque
 from typing import List
 
 from scipy.fftpack import fft, ifft
 import numpy as np
 
-from kapacitor.udf.agent import Agent, Handler
-from kapacitor.udf import udf_pb2
+from .base import BaseDetector
 
 
 epsilon = 1e-12
 
 
-class SpectralResidualHandler(Handler):
+class SpectralResidualDetector(BaseDetector):
 
-    def __init__(self, agent):
+    def init(self):
         self._agent = agent
         self._field = ''
         self._history = None
