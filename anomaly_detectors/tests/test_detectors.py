@@ -35,4 +35,3 @@ class SpectralResidualTestCase(TestCase):
                 z=z,
             )
             print(np.max(O[q + z: -(q + z)]))
-

@@ -35,9 +35,10 @@ class TTestDetector(BaseDetector):
         if self.history.n != 0:
             # Perform Welch's t test
             t, pvalue = stats.ttest_ind_from_stats(
-                    self.history.mean, self.history.stddev(), self.history.n,
-                    self.batch.mean, self.batch.stddev(), self.batch.n,
-                    equal_var=False)
+                self.history.mean, self.history.stddev(), self.history.n,
+                self.batch.mean, self.batch.stddev(), self.batch.n,
+                equal_var=False,
+            )
             response = {
                 'pvalue': pvalue,
                 't': t,
@@ -91,7 +92,7 @@ class MovingStats:
         if self.n == self.size + 1:
             # update stats for removing old value
             old = self._window.pop(0)
-            oldM = (self.n * self.mean - old)/(self.n - 1)
+            oldM = (self.n * self.mean - old) / (self.n - 1)
             self._s -= (old - self.mean) * (old - oldM)
             self.mean = oldM
             self.n -= 1
