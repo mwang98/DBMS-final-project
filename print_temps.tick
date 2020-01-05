@@ -35,18 +35,6 @@ data
         .crit(lambda: 0 < 100)
         .log('/tmp/kapacitor_udf/bed_failure.log')
 
-data
-    @tTest()
-        .field('air')
-        .size(3600)
-    |alert()
-        .id('air')
-        .crit(lambda: 0 < 100)
-        .log('/tmp/kapacitor_udf/air_failure.log')
-        |influxDBOut()
-            .database('Mike')
-            .retentionPolicy('autogen')
-            .measurement('temp_log')
 
 // store data to influxdb
 data
