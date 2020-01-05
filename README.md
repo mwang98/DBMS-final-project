@@ -62,6 +62,7 @@ You can run `bash run.sh` directly, detailed descriptions are below.
     Check logs for errors
     ```shell script
     sudo tail -f -n 128 /var/log/kapacitor/kapacitor.log
+    sudo tail -f -n 128 /usr/local/var/log/kapacitor.log
     ```
 
 3. Define Kapacitor Task
