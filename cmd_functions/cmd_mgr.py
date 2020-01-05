@@ -9,11 +9,11 @@ class CmdMgr():
         self.analysisMethod = ['ttest', 'fft']
 
 
-    def defineTask( self, analysisType, argv ):
+    def defineTask( self, argv ):
         input_arg = copy.deepcopy(argv)
         input_arg ['id'] = shortuuid.uuid()
 
-        self.tasks.append( Task( input_arg, analysisType ) )
+        self.tasks.append( Task( input_arg ) )
         task = self.tasks[-1]
         dbrp = task.getTick()
         task.define()
