@@ -70,9 +70,10 @@ class Parser():
 
 def main():
     parser = Parser()
-    print ( sys.argv[1] )
-    f = open(sys.argv[1],'r')
-    cmds = f.readlines()
+    cmds = []
+    if len(sys.argv) >= 2:
+        f = open(sys.argv[1],'r')
+        cmds = f.readlines()
     while True:
         cmd = ""
         if cmds:
@@ -86,7 +87,7 @@ def main():
         try:
             args = parser.argparser.parse_args(_cmd)
             parser.func( args )
-        except:
+        except :
             print("")
 
 
