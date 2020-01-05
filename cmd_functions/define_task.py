@@ -53,11 +53,19 @@ class Task():
         return dbrt
 
     def define( self ):
-        os.system( f"kapacitor define {self.tick_name} -tick {self.tick_path}" )
+        try:
+            os.system( f"kapacitor define {self.tick_name} -tick {self.tick_path}" )
+        except OSError as e:
+            print("Unable to define task in kapacitor: " ,e)
+            del self
     
     def enable( self ):
-        os.system( f"kapacitor enable {self.tick_name}" )
-        self.status = True
+        try:
+            os.system( f"kapacitor enable {self.tick_name}" )
+            self.status = True
+        except OSError as e:
+            print("Unable to execute task in kapacitor: " ,e)
+            del self
     
     def disable( self ):
         os.system( f"kapacitor disable {self.tick_name}" )

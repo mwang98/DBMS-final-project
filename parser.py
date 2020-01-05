@@ -85,7 +85,7 @@ class Parser():
                 print( "================")
                 print( *self.mgr.listMethods(), sep = "\n" )
             elif args.listname == "task":
-                print( args.listname )
+                # print( args.listname )
                 self.mgr.listTasks()
 
 def main():
