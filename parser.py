@@ -80,11 +80,13 @@ class Parser():
         elif args.subparser_name == "List":
             if args.listname == ["method"]:
                 # print( args.listname )
-                self.mgr.listMethods()
+                # print( self.mgr.listMethods() )
+                print( "Method Name" )
+                print( "================")
+                print( *self.mgr.listMethods(), sep = "\n" )
             elif args.listname == ["task"]:
                 # print( args.listname )
                 self.mgr.listTasks()
-
 
 def main():
     parser = Parser()
