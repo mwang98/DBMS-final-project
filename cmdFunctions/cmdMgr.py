@@ -18,7 +18,7 @@ class cmdMgr():
         dbrp = task.getTick()
         task.define()
 
-        return input_arg ['id']
+        return dbrp
     
     
     def execTask( self, id ):
@@ -74,21 +74,21 @@ def main():
     print("----------------")
     mgr.listTasks()
 
-    mgr.execTask(ids[0])
-    mgr.listTasks()
-    os.system("kapacitor list tasks")
+    # mgr.execTask(ids[0])
+    # mgr.listTasks()
+    # os.system("kapacitor list tasks")
 
-    mgr.modifyTask(ids[0], modified_obj) 
-    mgr.listTasks()
-    os.system("kapacitor list tasks")
+    # mgr.modifyTask(ids[0], modified_obj) 
+    # mgr.listTasks()
+    # os.system("kapacitor list tasks")
 
-    mgr.stopTask(ids[0])
-    mgr.listTasks()
-    os.system("kapacitor list tasks")
+    # mgr.stopTask(ids[0])
+    # mgr.listTasks()
+    # os.system("kapacitor list tasks")
 
-    mgr.deleteTask(ids[0])
-    mgr.listTasks()
-    os.system("kapacitor list tasks")
+    # mgr.deleteTask(ids[0])
+    # mgr.listTasks()
+    # os.system("kapacitor list tasks")
 
 
 if __name__ == '__main__':
