@@ -20,7 +20,7 @@ class Parser():
         parser_M   = subparsers.add_parser( "Modify",     help = "modify the task")
         parser_L   = subparsers.add_parser( "List",       help = "show the list of [ tasks | methods ]")
 
-        parser_Def.add_argument( "-task",   "--taskname",     help="name the task",                required=True,)
+        parser_Def.add_argument( "-task",   "--taskName",     help="name the task",                required=True,)
         parser_Def.add_argument( "-md",     "--method",       help="choose a method",              required=True, choices=methods)
         parser_Def.add_argument( "-d",      "--database",     help="choose the database" ,         required=True,)
         parser_Def.add_argument( "-ms",     "--measurement",  help="choose the measurement" ,      required=True,)
@@ -44,14 +44,7 @@ class Parser():
 
     def func( self, args ):
         if args.subparser_name == "Define":
-            obj = {
-                "method": args.method,
-                "taskName": args.taskname,
-                "database": args.database,
-                "measurement": args.measurement,
-                "field": args.field,
-                "size": args.size
-            }
+            obj = vars( args )
             for key,value in self.mgr.defineTask(obj).items():
                 print(key+"="+value)
         elif args.subparser_name == "Execute":
@@ -61,14 +54,7 @@ class Parser():
         elif args.subparser_name == "Delete":
             self.mgr.deleteTask( args.taskID )
         elif args.subparser_name == "Modify":
-            obj = {
-                "method":args.method,
-                "database": args.database,
-                "measurement": args.measurement,
-                "field": args.field,
-                "size": args.size
-            }
-
+            obj = vars( args )
             filtered = {k: v for k, v in obj.items() if v is not None}
             obj.clear()
             obj.update(filtered)
