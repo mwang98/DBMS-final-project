@@ -18,50 +18,50 @@ class Parser():
         parser_M   = subparsers.add_parser( "Modify",     help = "modify the task")
         parser_L   = subparsers.add_parser( "List",       help = "show the list of [ tasks | tests ]")
 
-        parser_Def.add_argument( "-task",   "--taskname", nargs="+",    help="name the task",                required=True,)
-        parser_Def.add_argument( "-md",     "--method", nargs="+",      help="choose a method",              required=True,)
-        parser_Def.add_argument( "-d",      "--database", nargs="+",    help="choose the database" ,         required=True,)
-        parser_Def.add_argument( "-ms",     "--measurement", nargs="+", help="choose the measurement" ,      required=True,)
-        parser_Def.add_argument( "-f",      "--field", nargs="+",       help="choose the field" ,            required=True,)
-        parser_Def.add_argument( "-s",      "--size", nargs="+",        help="specify the size" ,            default=3600 ,  type=int)
+        parser_Def.add_argument( "-task",   "--taskname",     help="name the task",                required=True,)
+        parser_Def.add_argument( "-md",     "--method",       help="choose a method",              required=True,)
+        parser_Def.add_argument( "-d",      "--database",     help="choose the database" ,         required=True,)
+        parser_Def.add_argument( "-ms",     "--measurement",  help="choose the measurement" ,      required=True,)
+        parser_Def.add_argument( "-f",      "--field",        help="choose the field" ,            required=True,)
+        parser_Def.add_argument( "-s",      "--size",         help="specify the size" ,            default=3600 ,  type=int)
 
-        parser_E.add_argument  ( "-task",   "--taskname", nargs="+",    help="choose which task to execute", required=True,)
+        parser_E.add_argument  ( "-task",   "--taskname",     help="choose which task to execute", required=True,)
 
-        parser_S.add_argument  ( "-task",   "--taskname", nargs="+",    help="choose which task to stop",    required=True,)
+        parser_S.add_argument  ( "-task",   "--taskname",     help="choose which task to stop",    required=True,)
 
-        parser_Del.add_argument( "-task",   "--taskname", nargs="+",    help="choose which task to stop",    required=True,)
+        parser_Del.add_argument( "-task",   "--taskname",     help="choose which task to stop",    required=True,)
 
-        parser_M.add_argument  ( "-task",   "--taskname", nargs="+",    help="choose which task to modify",  required=True,)
-        parser_M.add_argument  ( "-md",     "--method", nargs="+",      help="choose a method",                            )
-        parser_M.add_argument  ( "-d",      "--database", nargs="+",    help="choose the database",                        )
-        parser_M.add_argument  ( "-ms",     "--measurement", nargs="+", help="choose the measurement",                     )
-        parser_M.add_argument  ( "-f",      "--field", nargs="+",       help="choose the field",                           )
-        parser_M.add_argument  ( "-s",      "--size", nargs="+",        help="specify the size" ,                 type=int,)
+        parser_M.add_argument  ( "-task",   "--taskname",     help="choose which task to modify",  required=True,)
+        parser_M.add_argument  ( "-md",     "--method",       help="choose a method",                            )
+        parser_M.add_argument  ( "-d",      "--database",     help="choose the database",                        )
+        parser_M.add_argument  ( "-ms",     "--measurement",  help="choose the measurement",                     )
+        parser_M.add_argument  ( "-f",      "--field",        help="choose the field",                           )
+        parser_M.add_argument  ( "-s",      "--size",         help="specify the size" ,                 type=int,)
 
-        parser_L.add_argument  ( "listname", nargs="+",                 help="choose which list to show",     choices=["method", "task"], type=str.lower)
+        parser_L.add_argument  ( "listname",                  help="choose which list to show",     choices=["method", "task"], type=str.lower)
 
     def func( self, args ):
         if args.subparser_name == "Define":
             obj = {
-                "taskName": args.taskname[0],
-                "database": args.database[0],
-                "measurement": args.measurement[0],
-                "field": args.field[0],
+                "taskName": args.taskname,
+                "database": args.database,
+                "measurement": args.measurement,
+                "field": args.field,
                 "size": str(args.size)
             }
-            self.mgr.defineTask(args.method[0], obj)
+            self.mgr.defineTask(args.method, obj)
         elif args.subparser_name == "Execute":
             # print ( args.subparser_name )
             # print ( args.taskname )
-            self.mgr.execTask( args.taskname[0] )
+            self.mgr.execTask( args.taskname )
         elif   args.subparser_name == "Stop":
             # print ( args.subparser_name )
             # print ( args.taskname )
-            self.mgr.stopTask( args.taskname[0] )
+            self.mgr.stopTask( args.taskname )
         elif args.subparser_name == "Delete":
             # print ( args.subparser_name )
             # print ( args.taskname )
-            self.mgr.deleteTask( args.taskname[0] )
+            self.mgr.deleteTask( args.taskname )
         elif args.subparser_name == "Modify":
             # print ( args.subparser_name )
             # print ( args.taskname )
@@ -70,10 +70,10 @@ class Parser():
             # if args.field :      print ( args.field )
             # if args.size :       print ( args.size )
             obj = {
-                "method":args.method[0],
-                "database": args.database[0],
-                "measurement": args.measurement[0],
-                "field": args.field[0],
+                "method":args.method,
+                "database": args.database,
+                "measurement": args.measurement,
+                "field": args.field,
                 "size": str(args.size)
             }
             self.mgr.modifyTask( args.taskname, obj)
