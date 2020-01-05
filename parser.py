@@ -88,7 +88,7 @@ def main():
             args = parser.argparser.parse_args(_cmd)
             parser.func( args )
         except :
-            print("")
+            print( "" )
 
 
 if __name__ == '__main__':
