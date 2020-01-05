@@ -84,11 +84,19 @@ class Parser():
 
 def main():
     parser = Parser()
+    print ( sys.argv[1] )
+    f = open(sys.argv[1],'r')
+    cmds = f.readlines()
     while True:
-        cmd = input("parser>>>$ ")
-        if cmd == "exit":
-            break
+        cmd = ""
+        if cmds:
+            cmd = cmds.pop( 0 )
+            print("parser>>>$ "+cmd)
+        else:
+            cmd = input("parser>>>$ ")
         _cmd = cmd.split()
+        if _cmd == ["exit"]:
+            break
         try:
             args = parser.argparser.parse_args(_cmd)
             parser.func( args )
