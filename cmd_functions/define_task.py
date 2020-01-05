@@ -4,7 +4,7 @@ from tick_template.ttest import ttest
 from tick_template.fft   import fft
   
 
-OUTPUT_PATH = './tickFiles/'
+OUTPUT_PATH = './tick_files/'
 LOG_PATH = '/tmp/kapacitor_udf/'
 
 class Task():

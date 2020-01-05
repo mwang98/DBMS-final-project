@@ -1,14 +1,14 @@
 import argparse
 import os
 import sys
-sys.path.append('./cmdFunctions')
+sys.path.append('./cmd_functions')
 
-from cmdFunctions import cmdMgr
+from cmd_functions import cmd_mgr
 
 class Parser():
     def __init__( self ):
         self.argparser = argparse.ArgumentParser()
-        self.mgr = cmdMgr.cmdMgr()
+        self.mgr = cmd_mgr.CmdMgr()
         subparsers = self.argparser.add_subparsers( metavar="==ACTIONS==", help="type \"exit\" to exit", dest='subparser_name')
 
         parser_Def = subparsers.add_parser( "Define",     help = "define the task")
@@ -78,13 +78,13 @@ class Parser():
             }
             self.mgr.modifyTask( args.taskname, obj)
         elif args.subparser_name == "List":
-            if args.listname == "method":
+            if args.listname == ["method"]:
                 # print( args.listname )
                 # print( self.mgr.listMethods() )
                 print( "Method Name" )
                 print( "================")
                 print( *self.mgr.listMethods(), sep = "\n" )
-            elif args.listname == "task":
+            elif args.listname == ["task"]:
                 # print( args.listname )
                 self.mgr.listTasks()
 

@@ -1,9 +1,9 @@
 import shortuuid
 import copy
 import os
-from defineTask import Task
+from define_task import Task
 
-class cmdMgr():
+class CmdMgr():
     def __init__( self ):
         self.tasks = []
         self.analysisMethod = ['ttest', 'fft']
