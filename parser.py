@@ -78,13 +78,13 @@ class Parser():
             }
             self.mgr.modifyTask( args.taskname, obj)
         elif args.subparser_name == "List":
-            if args.listname == ["method"]:
+            if args.listname == "method":
                 # print( args.listname )
                 # print( self.mgr.listMethods() )
                 print( "Method Name" )
                 print( "================")
                 print( *self.mgr.listMethods(), sep = "\n" )
-            elif args.listname == ["task"]:
+            elif args.listname == "task":
                 # print( args.listname )
                 self.mgr.listTasks()
 
