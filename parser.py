@@ -50,7 +50,7 @@ class Parser():
                 "database": args.database,
                 "measurement": args.measurement,
                 "field": args.field,
-                "size": str(args.size)
+                "size": args.size
             }
             for key,value in self.mgr.defineTask(obj).items():
                 print(key+"="+value)
