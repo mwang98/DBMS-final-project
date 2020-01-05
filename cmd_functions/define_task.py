@@ -31,7 +31,7 @@ class Task():
         urlrt = "autogen"
         dbrt    = {
             "db": self.tick_name,
-            "rt": urlrt
+            "rp": urlrt
         }
         content = ""
         if not os.path.exists( OUTPUT_PATH ):
