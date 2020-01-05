@@ -18,7 +18,7 @@ class Parser():
         parser_S   = subparsers.add_parser( "Stop",       help = "stop the task")
         parser_Del = subparsers.add_parser( "Delete",     help = "delete the task")
         parser_M   = subparsers.add_parser( "Modify",     help = "modify the task")
-        parser_L   = subparsers.add_parser( "List",       help = "show the list of [ tasks | tests ]")
+        parser_L   = subparsers.add_parser( "List",       help = "show the list of [ tasks | methods ]")
 
         parser_Def.add_argument( "-task",   "--taskname",     help="name the task",                required=True,)
         parser_Def.add_argument( "-md",     "--method",       help="choose a method",              required=True, choices=methods)
@@ -40,38 +40,27 @@ class Parser():
         parser_M.add_argument  ( "-f",      "--field",        help="choose the field",                           )
         parser_M.add_argument  ( "-s",      "--size",         help="specify the size" ,                 type=int,)
 
-        parser_L.add_argument  ( "listname",                  help="choose which list to show",     choices=["method", "task"], type=str.lower)
+        parser_L.add_argument  ( "listname",                  help="choose which list to show",     choices=["methods", "tasks"], type=str.lower)
 
     def func( self, args ):
         if args.subparser_name == "Define":
             obj = {
+                "method": args.method,
                 "taskName": args.taskname,
                 "database": args.database,
                 "measurement": args.measurement,
                 "field": args.field,
                 "size": str(args.size)
             }
-            for key,value in self.mgr.defineTask(args.method, obj).items():
+            for key,value in self.mgr.defineTask(obj).items():
                 print(key+"="+value)
         elif args.subparser_name == "Execute":
-            # print ( args.subparser_name )
-            # print ( args.taskname )
             self.mgr.execTask( args.taskID )
         elif   args.subparser_name == "Stop":
-            # print ( args.subparser_name )
-            # print ( args.taskname )
             self.mgr.stopTask( args.taskID )
         elif args.subparser_name == "Delete":
-            # print ( args.subparser_name )
-            # print ( args.taskname )
             self.mgr.deleteTask( args.taskID )
         elif args.subparser_name == "Modify":
-            # print ( args.subparser_name )
-            # print ( args.taskname )
-            # if args.database :   print ( args.database )
-            # if args.measurement :print ( args.measurement )
-            # if args.field :      print ( args.field )
-            # if args.size :       print ( args.size )
             obj = {
                 "method":args.method,
                 "database": args.database,
@@ -84,17 +73,13 @@ class Parser():
             obj.clear()
             obj.update(filtered)
 
-            print( obj )
             self.mgr.modifyTask( args.taskID, obj )
         elif args.subparser_name == "List":
-            if args.listname == "method":
-                # print( args.listname )
-                # print( self.mgr.listMethods() )
+            if args.listname == "methods":
                 print( "Method Name" )
                 print( "================")
                 print( *self.mgr.listMethods(), sep = "\n" )
-            elif args.listname == "task":
-                # print( args.listname )
+            elif args.listname == "tasks":
                 self.mgr.listTasks()
 
 def main():
