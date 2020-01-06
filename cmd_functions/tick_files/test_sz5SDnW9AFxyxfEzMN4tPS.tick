@@ -1,0 +1,31 @@
+dbrp "test_sz5SDnW9AFxyxfEzMN4tPS"."autogen"
+var data = stream
+    |from()
+        .measurement('temperatures')
+    |window()
+        .period(10s)
+        .every(10s)
+
+data
+    @tTest()
+        .field('hotend')
+        .size(3600)
+        .detector_type('ttest')
+        .detector_params('{"alpha": 1}')
+    |alert()
+        .id('hotend')
+        .crit(lambda: "is_anomaly")
+        .log('/tmp/kapacitor_udf/test_sz5SDnW9AFxyxfEzMN4tPS_failure.log')
+        |influxDBOut()
+            .create()
+            .database('dbfinal')
+            .retentionPolicy('autogen')
+            .measurement('test_sz5SDnW9AFxyxfEzMN4tPS_alert')
+    
+data
+    |influxDBOut()
+        .create()
+        .database('dbfinal')
+        .retentionPolicy('autogen')
+        .measurement('test_sz5SDnW9AFxyxfEzMN4tPS')
+
