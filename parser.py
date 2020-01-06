@@ -19,7 +19,7 @@ class StoreDictKeyPair(argparse.Action):
 
 class Parser():
     def __init__( self ):
-        self.argparser = argparse.ArgumentParser()
+        self.argparser = argparse.ArgumentParser(description='parse key pairs into a dictionarygg')
         self.mgr = cmd_mgr.CmdMgr()
 
         self.methods = self.mgr.listMethods()
