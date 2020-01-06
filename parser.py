@@ -4,13 +4,25 @@ import sys
 sys.path.append('./cmd_functions')
 
 from cmd_functions import cmd_mgr
+class StoreDictKeyPair(argparse.Action):
+     def __call__(self, parser, namespace, values, option_string=None):
+         my_dict = {}
+         for kv in values.split(","):
+             k,v = kv.split("=")
+             x = 0
+             try:
+                 x = int(v)
+             except:
+                 x = float(v)
+             my_dict[k] = x
+         setattr(namespace, self.dest, my_dict)
 
 class Parser():
     def __init__( self ):
         self.argparser = argparse.ArgumentParser()
         self.mgr = cmd_mgr.CmdMgr()
 
-        methods = self.mgr.listMethods()
+        self.methods = self.mgr.listMethods()
         subparsers = self.argparser.add_subparsers( metavar="==ACTIONS==", help="type \"exit\" to exit", dest='subparser_name')
 
         parser_Def = subparsers.add_parser( "Define",     help = "define the task")
@@ -21,11 +33,12 @@ class Parser():
         parser_L   = subparsers.add_parser( "List",       help = "show the list of [ tasks | methods ]")
 
         parser_Def.add_argument( "-task",   "--taskName",     help="name the task",                required=True,)
-        parser_Def.add_argument( "-md",     "--method",       help="choose a method",              required=True, choices=methods)
+        parser_Def.add_argument( "-md",     "--method",       help="choose a method ",             required=True, choices=self.methods )
         parser_Def.add_argument( "-d",      "--database",     help="choose the database" ,         required=True,)
         parser_Def.add_argument( "-ms",     "--measurement",  help="choose the measurement" ,      required=True,)
         parser_Def.add_argument( "-f",      "--field",        help="choose the field" ,            required=True,)
         parser_Def.add_argument( "-s",      "--size",         help="specify the size" ,            default=3600 ,  type=int)
+        parser_Def.add_argument( "-p",      "--params",       help="determine the parameters",     action=StoreDictKeyPair, metavar="param1=VAL1,param2=VAL2...")
 
         parser_E.add_argument  ( "-tid",    "--taskID"  ,     help="choose which task to execute", required=True,)
 
@@ -45,8 +58,13 @@ class Parser():
     def func( self, args ):
         if args.subparser_name == "Define":
             obj = vars( args )
-            for key,value in self.mgr.defineTask(obj).items():
-                print(key+"="+value)
+            st  = args.method
+            if self.methods[st]['checker'](obj['params']):
+                dbrp,_ = self.mgr.defineTask(obj)
+                for key,value in dbrp.items():
+                    print(key+"="+value)
+            else:
+                print("parameters not allowed!!")
         elif args.subparser_name == "Execute":
             self.mgr.execTask( args.taskID )
         elif   args.subparser_name == "Stop":

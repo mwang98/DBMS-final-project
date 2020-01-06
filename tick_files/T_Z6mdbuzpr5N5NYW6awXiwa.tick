@@ -1,0 +1,30 @@
+dbrp "T_Z6mdbuzpr5N5NYW6awXiwa"."autogen"
+var data = stream
+    |from()
+        .measurement('M')
+    |window()
+        .period(10s)
+        .every(10s)
+
+data
+    @tTest()
+        .field('f')
+        .size(500)
+        .detector_type('ttest')
+        .detector_params('{"alpha": 0.1}')
+    |alert()
+        .id('f')
+        .crit(lambda: "is_anomaly")
+        .log('/tmp/kapacitor_udf/T_Z6mdbuzpr5N5NYW6awXiwa_failure.log')
+        |influxDBOut()
+            .database('D')
+            .retentionPolicy('autogen')
+            .measurement('T_Z6mdbuzpr5N5NYW6awXiwa_alert')
+    
+data
+    |influxDBOut()
+        .create()
+        .database('D')
+        .retentionPolicy('autogen')
+        .measurement('T_Z6mdbuzpr5N5NYW6awXiwa')
+

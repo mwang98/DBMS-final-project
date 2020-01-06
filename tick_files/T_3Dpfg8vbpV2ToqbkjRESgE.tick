@@ -1,0 +1,29 @@
+dbrp "T_3Dpfg8vbpV2ToqbkjRESgE"."autogen"
+var data = stream
+    |from()
+        .measurement('M')
+    |window()
+        .period(10s)
+        .every(10s)
+
+data
+    @tTest()
+        .field('f')
+        .size(500)
+        .detector_type('spectral_residual')
+        .detector_params('{'q': 4, 'z': 5}')
+    |alert()
+        .id('f')
+        .crit(lambda: "is_anomaly")
+        .log('/tmp/kapacitor_udf/T_3Dpfg8vbpV2ToqbkjRESgE_failure.log')
+        |influxDBOut()
+            .database('D')
+            .retentionPolicy('autogen')
+            .measurement('T_3Dpfg8vbpV2ToqbkjRESgE_alert')
+    
+data
+    |influxDBOut()
+        .create()
+        .database('D')
+        .retentionPolicy('autogen')
+        .measurement('T_3Dpfg8vbpV2ToqbkjRESgE')
