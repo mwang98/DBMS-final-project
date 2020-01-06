@@ -11,8 +11,8 @@ bed_t = 90
 air_t = 70
 
 # Connection info
-write_url = 'http://localhost:9092/write?db=test_sz5SDnW9AFxyxfEzMN4tPS.tick&rp=autogen&precision=s'
-measurement = 'temperatures'
+write_url = 'http://localhost:9092/write?db=taskk_ZfZRtYQ6RrjZohUAY9fWtG&rp=autogen&precision=s'
+measurement = 'temps'
 
 
 def temp(target, sigma):
@@ -24,6 +24,7 @@ def temp(target, sigma):
 
 
 def main():
+    session = requests.Session()
     hotend_sigma = 0
     bed_sigma = 0
     air_sigma = 0
@@ -79,25 +80,20 @@ def main():
         hotend = temp(hotend_t + hotend_offset, hotend_sigma)
         bed = temp(bed_t + bed_offset, bed_sigma)
         air = temp(air_t + air_offset, air_sigma)
-        # point = "%s hotend=%f,bed=%f,air=%f %d" % (
-        #     measurement,
-        #     hotend,
-        #     bed,
-        #     air,
-        #     time.time(),
-        # )
-        point = "%s hotend=%f %d" % (
+        point = "%s hotend=%f,bed=%f,air=%f %d" % (
             measurement,
             hotend,
-            time.time(),
+            bed,
+            air,
+            time.time()
         )
-        time.sleep(0.5)
-        print(i, time.time())
-        r = requests.post(write_url, data=point)
+        time.sleep(1)
+        r = session.post(write_url, data=point)
+        print(i)
         if r.status_code != 204:
             print(r.text, file=sys.stderr)
             return 1
-        now += second
+    return 0
 
 
 if __name__ == '__main__':
