@@ -4,9 +4,9 @@ mkdir -m777 /tmp/kapacitor_udf/
 
 sleep 5
 
-sudo kapacitor define print_temps -tick print_temps.tick
+kapacitor define print_temps -tick print_temps.tick
 
-# rid=$(kapacitor record stream -task print_temps -duration 10s -no-wait)
+# rid=$(kapacitor record stream -task print_temps -duration 24h -no-wait)
 # echo $rid
 
 # python3 printer_data.py
@@ -16,7 +16,7 @@ sudo kapacitor define print_temps -tick print_temps.tick
 # kapacitor replay -task print_temps -recording $rid -rec-time
 
 echo "printing "
-python3 printer_data.py &
+python3 printer_data.py
 
 # sudo tail -f -n 128 /var/log/kapacitor/kapacitor.log
-sudo tail -f -n 128 /tmp/kapacitor_udf/{hotend,bed,air}_failure.log
+# tail -f -n 128 /tmp/kapacitor_udf/{hotend,bed,air}_failure.log

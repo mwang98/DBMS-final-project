@@ -1,37 +1,48 @@
 import shortuuid
 import copy
-from defineTask import Task
+import os
+from define_task import Task
 
-class cmdMgr():
+class CmdMgr():
     def __init__( self ):
         self.tasks = []
         self.analysisMethod = ['ttest', 'fft']
 
 
-    def defineTask( self, analysisType, argv ):
-        argv['id'] = shortuuid.uuid()
-        task = Task( argv, analysisType )
-        self.tasks.append( copy.deepcopy(task) )
+    def defineTask( self, argv ):
+        input_arg = copy.deepcopy(argv)
+        input_arg ['id'] = shortuuid.uuid()
+
+        self.tasks.append( Task( input_arg ) )
+        task = self.tasks[-1]
         dbrp = task.getTick()
-        task.defineTask()
+        task.define()
+
         return dbrp
     
     
     def execTask( self, id ):
         tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
         task  = tasks[0]
-        task.enableTask()
+        task.enable()
 
     def stopTask( self, id ):
         tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
         task  = tasks[0]
-        task.disableTask()
+        task.disable()
 
     def deleteTask( self, id ):
         tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
         task  = tasks[0]
-        task.deleteTask()
         self.tasks.remove( task )
+
+    def modifyTask( self, id, argv ):
+        tasks = list(filter( (lambda task: task.info['id'] == id), self.tasks ))
+        task  = tasks[0]
+        task.modify( argv )
+        dbrp  = task.getTick()
+        task.define()
+        return dbrp
 
     def listTasks( self ):
         print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<25} {:<15}". \
@@ -42,22 +53,3 @@ class cmdMgr():
     
     def listMethods( self ):
         return self.analysisMethod
-
-
-obj = {
-    "taskName": "monitorTemp",
-    "database": "Mike",
-    "measurement": "temperature",
-    "field": "hotend",
-    "size": "3600"
-}
-def main():
-    mgr = cmdMgr()
-    ids  = []
-    for i in range(10):
-        idx = mgr.defineTask('ttest', obj)
-        ids.append(idx)
-    print(" ")
-
-if __name__ == '__main__':
-    main()  
