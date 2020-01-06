@@ -18,6 +18,7 @@ data
         .crit(lambda: "is_anomaly")
         .log('{ log_path }')
         |influxDBOut()
+            .create()
             .database('{ argv["database"] }')
             .retentionPolicy('autogen')
             .measurement('{ urldb }_alert')
