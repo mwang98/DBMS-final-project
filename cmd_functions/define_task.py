@@ -18,7 +18,7 @@ class Task():
     
     def __del__( self ):
         os.system( f"kapacitor delete tasks {self.tick_name}" )
-        os.system( f"rm -f {self.tick_path} {self.log_path}" )
+        # os.system( f"rm -f {self.tick_path} {self.log_path}" )
         print(f"{self.tick_name} is removed.")
 
     def __str__( self ):

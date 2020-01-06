@@ -12,7 +12,7 @@ data
         .field('{ argv["field"] }')
         .size({ argv["size"] })
         .detector_type('spectral_residual')
-        .detector_params('{argv['param']}')
+        .detector_params('{argv['params']}')
     |alert()
         .id('{ argv["field"] }')
         .crit(lambda: "is_anomaly")

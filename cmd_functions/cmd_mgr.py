@@ -8,11 +8,13 @@ class CmdMgr():
         self.tasks = []
         self.analysisMethod = {
             'ttest': {
-                'alpha': "p-value threshold"
+                'alpha': "p-value threshold",
+                'checker': self.ttestChecker
             }, 
             'fft':{
                 'q': "frequency domain window",
-                'z': "time domain window"
+                'z': "time domain window",
+                'checker': self.fftChecker
             }}
 
 
@@ -25,7 +27,7 @@ class CmdMgr():
         dbrp = task.getTick()
         task.define()
 
-        return dbrp
+        return dbrp, input_arg ['id']
     
     
     def execTask( self, id ):
@@ -60,3 +62,48 @@ class CmdMgr():
     
     def listMethods( self ):
         return self.analysisMethod
+
+    def ttestChecker( self, params ):
+        if params["alpha"] >= 0 and params["alpha"] <= 1:
+            return True
+        else:
+            return False
+    
+    def fftChecker( self, params ):
+        if type(params["q"]) is int and type(params["z"]) is int:
+            return params["q"] > 0 and params["z"] > 0 
+        return False
+
+obj = {
+        "method": "ttest",
+        "taskName": "testTemp",
+        "database": "dbdbdb",
+        "measurement": "aaa",
+        "field": "bbb",
+        "size": 3600,
+        "params":{
+            "alpha": 0.0001
+        }
+    }
+def main():
+    idx = []
+    mgr = CmdMgr()
+    for i in range(10):
+        _, id = mgr.defineTask(obj)
+        idx.append(id)
+
+    mgr.listTasks()
+
+    mgr.execTask(idx[0])
+    mgr.listTasks()
+
+    mgr.stopTask(idx[0])
+    mgr.listTasks()
+
+    mgr.deleteTask(idx[0])
+    mgr.listTasks()
+
+
+
+if __name__ == "__main__":
+    main()
