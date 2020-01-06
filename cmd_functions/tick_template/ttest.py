@@ -17,22 +17,20 @@ data
         .detector_params('{ json.dumps(argv["params"]) }')
     |alert()
         .id('{ argv["field"] }')
-        .crit(lambda: "is_anomaly")
+        // .crit(lambda: "is_anomaly")
+        .crit(lambda: 0 < 1)
         .log('{ log_path }')
         |influxDBOut()
             .create()
             .database('{ argv["database"] }')
             .retentionPolicy('autogen')
-            .measurement('{ urldb }_alert')
+            .measurement('{ argv["measurement"] }_alert')
     
 data
     |influxDBOut()
         .create()
         .database('{ argv["database"] }')
         .retentionPolicy('autogen')
-        .measurement('{ urldb }')
+        .measurement('{ argv["measurement"] }')
 
 """
-# .tag('hotend', 'a')
-# .tag('bed', 'b')
-# .tag('air', 'c')

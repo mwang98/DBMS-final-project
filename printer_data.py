@@ -11,8 +11,9 @@ bed_t = 90
 air_t = 70
 
 # Connection info
-write_url = 'http://localhost:9092/write?db=test_sz5SDnW9AFxyxfEzMN4tPS.tick&rp=autogen&precision=s'
-measurement = 'temperatures'
+write_url = 'http://localhost:9092/write?db=T_ARUF4zmPotwN5Dyh9RcMbE&rp=autogen&precision=s'
+# measurement = 'temperatures'
+measurement = "M"
 
 
 def temp(target, sigma):
@@ -24,6 +25,7 @@ def temp(target, sigma):
 
 
 def main():
+    session = requests.Session()
     hotend_sigma = 0
     bed_sigma = 0
     air_sigma = 0
@@ -77,23 +79,15 @@ def main():
 
         # generate temps
         hotend = temp(hotend_t + hotend_offset, hotend_sigma)
-        bed = temp(bed_t + bed_offset, bed_sigma)
-        air = temp(air_t + air_offset, air_sigma)
-        # point = "%s hotend=%f,bed=%f,air=%f %d" % (
-        #     measurement,
-        #     hotend,
-        #     bed,
-        #     air,
-        #     time.time(),
-        # )
-        point = "%s hotend=%f %d" % (
+        point = "%s f=%f %d" % (
             measurement,
             hotend,
             time.time(),
         )
         time.sleep(0.5)
         print(i, time.time())
-        r = requests.post(write_url, data=point)
+        # r = requests.post(write_url, data=point)
+        r = session.post(write_url, data=point)
         if r.status_code != 204:
             print(r.text, file=sys.stderr)
             return 1

@@ -1,3 +1,5 @@
+import  json
+
 def fft( urldb, argv, log_path ):
     return f"""dbrp "{ urldb }"."autogen"
 var data = stream
@@ -12,7 +14,7 @@ data
         .field('{ argv["field"] }')
         .size({ argv["size"] })
         .detector_type('spectral_residual')
-        .detector_params('{argv['params']}')
+        .detector_params('{json.dumps(argv['params'])}')
     |alert()
         .id('{ argv["field"] }')
         .crit(lambda: "is_anomaly")
@@ -21,12 +23,12 @@ data
             .create()
             .database('{ argv["database"] }')
             .retentionPolicy('autogen')
-            .measurement('{ urldb }_alert')
+            .measurement('{ argv["measurement"] }_alert')
     
 data
     |influxDBOut()
         .create()
         .database('{ argv["database"] }')
         .retentionPolicy('autogen')
-        .measurement('{ urldb }')
+        .measurement('{ argv["measurement"] }')
 """

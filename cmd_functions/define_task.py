@@ -17,8 +17,8 @@ class Task():
         self.log_path    = f"{ LOG_PATH    }{ self.tick_name }_failure.log"
     
     def __del__( self ):
-        # os.system( f"kapacitor delete tasks {self.tick_name}" )
-        # os.system( f"rm -f {self.tick_path} {self.log_path}" )
+        os.system( f"kapacitor delete tasks {self.tick_name}" )
+        os.system( f"rm -f {self.tick_path} {self.log_path}" )
         print(f"{self.tick_name} is removed.")
 
     def __str__( self ):
@@ -48,7 +48,7 @@ class Task():
 
         if self.info['method'] == 'ttest':
             content = ttest( self.tick_name, self.info, self.log_path )    
-        elif self.info['method'] == 'fft':
+        elif self.info['method'] == 'spectral-residual':
             content = fft  ( self.tick_name, self.info, self.log_path )
 
         tick.write( content )

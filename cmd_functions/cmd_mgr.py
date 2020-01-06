@@ -11,7 +11,7 @@ class CmdMgr():
                 'alpha': "p-value threshold",
                 'checker': self.ttestChecker
             }, 
-            'spectral residual':{
+            'spectral-residual':{
                 'q': "frequency domain window",
                 'z': "time domain window",
                 'checker': self.spectralChecker
