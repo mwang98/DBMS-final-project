@@ -3,8 +3,6 @@ dbrp "printer"."autogen"
 // This TICKscript monitors the three temperatures for a 3d printing job,
 // and triggers alerts if the temperatures start to experience abnormal behavior.
 
-// Define our desired significance level.
-
 // Select the temperatures measurements
 var data = stream
     |from()
@@ -20,33 +18,24 @@ data
         .field('hotend')
         // Keep a 1h rolling window
         .size(3600)
+        .detector_type('ttest')
+        .detector_params('{"alpha": 0.001}')
     |alert()
         .id('hotend')
-        .crit(lambda: 0 < 100)
+        .crit(lambda: "is_anomaly")
         .log('/tmp/kapacitor_udf/hotend_failure.log')
 
-// Do the same for the bed and air temperature.
 data
     @tTest()
         .field('bed')
         .size(3600)
+        .detector_type('spectral_residual')
+        .detector_params('{"q": 50, "z": 50}')
     |alert()
         .id('bed')
-        .crit(lambda: 0 < 100)
+        .crit(lambda: "is_anomaly")
         .log('/tmp/kapacitor_udf/bed_failure.log')
 
-data
-    @tTest()
-        .field('air')
-        .size(3600)
-    |alert()
-        .id('air')
-        .crit(lambda: 0 < 100)
-        .log('/tmp/kapacitor_udf/air_failure.log')
-        |influxDBOut()
-            .database('Mike')
-            .retentionPolicy('autogen')
-            .measurement('temp_log')
 
 // store data to influxdb
 data
@@ -57,5 +46,3 @@ data
         .measurement('temperatures')
         .tag('hotend', 'a')
         .tag('bed', 'b')
-        .tag('air', 'c')
-        

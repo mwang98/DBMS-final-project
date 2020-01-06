@@ -6,7 +6,14 @@ from define_task import Task
 class CmdMgr():
     def __init__( self ):
         self.tasks = []
-        self.analysisMethod = ['ttest', 'fft']
+        self.analysisMethod = {
+            'ttest': {
+                'alpha': "p-value threshold"
+            }, 
+            'fft':{
+                'q': "frequency domain window",
+                'z': "time domain window"
+            }}
 
 
     def defineTask( self, argv ):

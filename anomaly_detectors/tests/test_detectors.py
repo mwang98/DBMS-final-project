@@ -1,9 +1,8 @@
 from unittest import TestCase
 
 import numpy as np
-from matplotlib import pyplot as plt
 
-from ..spectral_residual import SpectralResidualHandler
+from ..spectral_residual import SpectralResidualDetector
 
 
 class SpectralResidualTestCase(TestCase):
@@ -30,7 +29,7 @@ class SpectralResidualTestCase(TestCase):
     def test_detection(self):
         for i in range(0, len(self.data), 3600):
             q, z = 5, 5
-            O = SpectralResidualHandler.detect_anomalies(
+            O = SpectralResidualDetector.detect_anomalies(
                 data=self.data[i: i + 3600],
                 q=q,
                 z=z,
