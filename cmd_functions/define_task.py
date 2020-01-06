@@ -17,8 +17,8 @@ class Task():
         self.log_path    = f"{ LOG_PATH    }{ self.tick_name }_failure.log"
     
     def __del__( self ):
-        os.system( f"kapacitor delete tasks {self.tick_name}" )
-        os.system( f"rm -f {self.tick_path} {self.log_path}" )
+        # os.system( f"kapacitor delete tasks {self.tick_name}" )
+        # os.system( f"rm -f {self.tick_path} {self.log_path}" )
         print(f"{self.tick_name} is removed.")
 
     def __str__( self ):
@@ -36,6 +36,11 @@ class Task():
         if not os.path.exists( OUTPUT_PATH ):
             try:
                 os.mkdir( OUTPUT_PATH )
+            except OSError as e:
+                print("Failed to create the directory: {e}".format(e))
+        if not os.path.exists( LOG_PATH ):
+            try:
+                os.mkdir( LOG_PATH )
             except OSError as e:
                 print("Failed to create the directory: {e}".format(e))
 

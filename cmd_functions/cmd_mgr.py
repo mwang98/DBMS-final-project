@@ -6,7 +6,16 @@ from define_task import Task
 class CmdMgr():
     def __init__( self ):
         self.tasks = []
-        self.analysisMethod = ['ttest', 'fft']
+        self.analysisMethod = {
+            'ttest': {
+                'alpha': "p-value threshold",
+                'checker': self.ttestChecker
+            }, 
+            'spectral residual':{
+                'q': "frequency domain window",
+                'z': "time domain window",
+                'checker': self.spectralChecker
+            }}
 
 
     def defineTask( self, argv ):
@@ -18,7 +27,7 @@ class CmdMgr():
         dbrp = task.getTick()
         task.define()
 
-        return dbrp
+        return dbrp, input_arg ['id']
     
     
     def execTask( self, id ):
@@ -53,3 +62,26 @@ class CmdMgr():
     
     def listMethods( self ):
         return self.analysisMethod
+
+    def ttestChecker( self, params ):
+        if params["alpha"] >= 0 and params["alpha"] <= 1:
+            return True
+        else:
+            return False
+    
+    def spectralChecker( self, params ):
+        if type(params["q"]) is int and type(params["z"]) is int:
+            return params["q"] > 0 and params["z"] > 0 
+        return False
+
+# obj = {
+#         "method": "ttest",
+#         "taskName": "test",
+#         "database": "dbfinal",
+#         "measurement": "temperatures",
+#         "field": "hotend",
+#         "size": 3600,
+#         "params":{
+#             "alpha": 1
+#         }
+#     }
