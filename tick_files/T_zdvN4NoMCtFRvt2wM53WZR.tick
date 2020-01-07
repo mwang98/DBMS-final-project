@@ -1,0 +1,32 @@
+dbrp "T_zdvN4NoMCtFRvt2wM53WZR"."autogen"
+var data = stream
+    |from()
+        .measurement('M')
+    |window()
+        .period(10s)
+        .every(10s)
+
+data
+    @tTest()
+        .field('f')
+        .size(500)
+        .detector_type('ttest')
+        .detector_params('{"alpha": 0.001}')
+    |alert()
+        .id('f')
+        // .crit(lambda: "is_anomaly")
+        .crit(lambda: 0 < 1)
+        .log('/tmp/kapacitor_udf/T_zdvN4NoMCtFRvt2wM53WZR_failure.log')
+        |influxDBOut()
+            .create()
+            .database('D')
+            .retentionPolicy('autogen')
+            .measurement('M_alert')
+    
+data
+    |influxDBOut()
+        .create()
+        .database('D')
+        .retentionPolicy('autogen')
+        .measurement('M')
+

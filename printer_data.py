@@ -11,7 +11,7 @@ bed_t = 90
 air_t = 70
 
 # Connection info
-write_url = 'http://localhost:9092/write?db=T_ARUF4zmPotwN5Dyh9RcMbE&rp=autogen&precision=s'
+write_url = 'http://localhost:9092/write?db=T_xpxLZoZbHkgF65aWqLFPY9&rp=autogen&precision=s'
 # measurement = 'temperatures'
 measurement = "M"
 
@@ -26,6 +26,8 @@ def temp(target, sigma):
 
 def main():
     session = requests.Session()
+    requests.adapters.DEFAULT_RETRIES = 5
+    session.keep_alive = False
     hotend_sigma = 0
     bed_sigma = 0
     air_sigma = 0
@@ -84,10 +86,14 @@ def main():
             hotend,
             time.time(),
         )
-        time.sleep(0.5)
+        time.sleep(0.1)
         print(i, time.time())
         # r = requests.post(write_url, data=point)
-        r = session.post(write_url, data=point)
+        try:
+            r = session.post(write_url, data=point ,headers={'Connection':'close'})
+        except requests.RequestException as e:
+            print("OOPS!! General Error")
+            print(str(e))
         if r.status_code != 204:
             print(r.text, file=sys.stderr)
             return 1
