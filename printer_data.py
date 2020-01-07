@@ -11,7 +11,11 @@ bed_t = 90
 air_t = 70
 
 # Connection info
+<<<<<<< HEAD
 write_url = 'http://localhost:9092/write?db=T_xpxLZoZbHkgF65aWqLFPY9&rp=autogen&precision=s'
+=======
+write_url = 'http://localhost:9092/write?db=T_DhNPvDAZpbfv9HWnCXjGMa&rp=autogen&precision=s'
+>>>>>>> 9a2374148dcfb94d7e14a8da71c39f5cf561cbce
 # measurement = 'temperatures'
 measurement = "M"
 
@@ -39,8 +43,8 @@ def main():
     # list of sigma values to start at a specified iteration
     hotend_anomalies = [
         (0, 0.5, 0),  # normal sigma
-        (3600, 3.0, -1.5),  # at one hour the hotend goes bad
-        (3900, 0.5, 0),  # 5 minutes later recovers
+        (50, 3.0, -1.5),  # at one hour the hotend goes bad
+        (200, 0.5, 0),  # 5 minutes later recovers
     ]
     bed_anomalies = [
         (0, 1.0, 0),  # normal sigma
@@ -90,9 +94,14 @@ def main():
         print(i, time.time())
         # r = requests.post(write_url, data=point)
         try:
+<<<<<<< HEAD
             r = session.post(write_url, data=point ,headers={'Connection':'close'})
         except requests.RequestException as e:
             print("OOPS!! General Error")
+=======
+            r = session.post(write_url, data=point)
+        except requests.RequestException as e:
+>>>>>>> 9a2374148dcfb94d7e14a8da71c39f5cf561cbce
             print(str(e))
         if r.status_code != 204:
             print(r.text, file=sys.stderr)
