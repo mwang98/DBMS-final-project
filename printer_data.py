@@ -11,7 +11,7 @@ bed_t = 90
 air_t = 70
 
 # Connection info
-write_url = 'http://localhost:9092/write?db=T_ARUF4zmPotwN5Dyh9RcMbE&rp=autogen&precision=s'
+write_url = 'http://localhost:9092/write?db=T_DhNPvDAZpbfv9HWnCXjGMa&rp=autogen&precision=s'
 # measurement = 'temperatures'
 measurement = "M"
 
@@ -37,8 +37,8 @@ def main():
     # list of sigma values to start at a specified iteration
     hotend_anomalies = [
         (0, 0.5, 0),  # normal sigma
-        (3600, 3.0, -1.5),  # at one hour the hotend goes bad
-        (3900, 0.5, 0),  # 5 minutes later recovers
+        (50, 30.0, -1.5),  # at one hour the hotend goes bad
+        (200, 0.5, 0),  # 5 minutes later recovers
     ]
     bed_anomalies = [
         (0, 1.0, 0),  # normal sigma
@@ -87,7 +87,10 @@ def main():
         time.sleep(0.5)
         print(i, time.time())
         # r = requests.post(write_url, data=point)
-        r = session.post(write_url, data=point)
+        try:
+            r = session.post(write_url, data=point)
+        except requests.RequestException as e:
+            print(str(e))
         if r.status_code != 204:
             print(r.text, file=sys.stderr)
             return 1
