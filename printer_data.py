@@ -37,7 +37,7 @@ def main():
     # list of sigma values to start at a specified iteration
     hotend_anomalies = [
         (0, 0.5, 0),  # normal sigma
-        (50, 30.0, -1.5),  # at one hour the hotend goes bad
+        (50, 3.0, -1.5),  # at one hour the hotend goes bad
         (200, 0.5, 0),  # 5 minutes later recovers
     ]
     bed_anomalies = [
