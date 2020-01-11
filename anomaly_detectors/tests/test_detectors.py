@@ -3,6 +3,8 @@ from unittest import TestCase
 import numpy as np
 
 from ..spectral_residual import SpectralResidualDetector
+from ..ttest import TTestDetector
+from .mock_classes import MockPoint
 
 
 class SpectralResidualTestCase(TestCase):
@@ -34,5 +36,39 @@ class SpectralResidualTestCase(TestCase):
                 q=q,
                 z=z,
             )
-            print(np.max(O[q + z: -(q + z)]))
 
+
+class TTestTestCase(TestCase):
+
+    def setUp(self) -> None:
+        self.hotend_t = 220
+        self.hotend_sigma = 0.5
+        self.hotend_offset = 0
+        self.detector = TTestDetector()
+        self.detector.init(size=600, field='hotend', params={'alpha': 0.06})
+        self.every = 10
+
+    def test_detection(self):
+        response_count, error_count = 0, 0
+        for i in range(3600):
+            # update sigma values
+            is_anomaly = False
+            hotend = np.random.normal(self.hotend_t + self.hotend_offset, self.hotend_sigma)
+            if i % 180 in list(range(55, 63)):
+                hotend *= 1.02
+                is_anomaly = True
+            point = MockPoint({'hotend': hotend})
+
+            if i % self.every == 0:
+                self.detector.begin_batch(None)
+
+            self.detector.point(point)
+
+            if i % self.every == (self.every - 1):
+                should_repsonse, ret = self.detector.end_batch(None)
+                if should_repsonse:
+                    response_count += 1
+                if should_repsonse and not ret['is_anomaly'] == is_anomaly:
+                    error_count += 1
+
+        print(f'error rate: {error_count / response_count}')
