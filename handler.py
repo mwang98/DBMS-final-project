@@ -34,6 +34,7 @@ class CustomHandler(Handler):
         response.info.options['size'].valueTypes.append(udf_pb2.INT)
         response.info.options['detector_type'].valueTypes.append(udf_pb2.STRING)
         response.info.options['detector_params'].valueTypes.append(udf_pb2.STRING)
+        print('info', file=sys.stderr)
         return response
 
     def init(self, init_req):
@@ -74,6 +75,7 @@ class CustomHandler(Handler):
         response = udf_pb2.Response()
         response.init.success = success
         response.init.error = msg[1:]
+        print('init', file=sys.stderr)
         return response
 
     def begin_batch(self, begin_req):
@@ -83,6 +85,7 @@ class CustomHandler(Handler):
         self.detector.point(point)
 
     def end_batch(self, batch_meta):
+        print('end_batch', file=sys.stderr)
         should_response, ret = self.detector.end_batch(batch_meta)
 
         if should_response != 0:
@@ -98,7 +101,7 @@ class CustomHandler(Handler):
                 elif isinstance(value, float):
                     response.point.fieldsDouble[key] = value
                 elif isinstance(value, (bool, np.bool_)):
-                    response.point.fieldsBool[key] = bool(value)
+                    response.point.fieldsInt[key] = int(value)
                 else:
                     print(f'invalid value key:{key}, value: {value}, type: {type(value)}', file=sys.stderr)
             self._agent.write_response(response)
