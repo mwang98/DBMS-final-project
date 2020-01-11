@@ -1,0 +1,31 @@
+dbrp "taskk_ZfZRtYQ6RrjZohUAY9fWtG"."autogen"
+var data = stream
+    |from()
+        .measurement('temps')
+    |window()
+        .period(10s)
+        .every(10s)
+
+data
+    @tTest()
+        .field('hotend')
+        .size(600)
+        .detector_type('ttest')
+        .detector_params('{"alpha": 0.02}')
+    |alert()
+        .id('hotend')
+        .crit(lambda: 0 < 1)
+        .log('/tmp/kapacitor_udf/taskk_ZfZRtYQ6RrjZohUAY9fWtG_failure.log')
+        |influxDBOut()
+            .create()
+            .database('mydb')
+            .retentionPolicy('autogen')
+            .measurement('taskk_ZfZRtYQ6RrjZohUAY9fWtG_alert')
+    
+data
+    |influxDBOut()
+        .create()
+        .database('mydb')
+        .retentionPolicy('autogen')
+        .measurement('temps')
+

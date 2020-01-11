@@ -45,7 +45,7 @@ class TTestTestCase(TestCase):
         self.hotend_sigma = 0.5
         self.hotend_offset = 0
         self.detector = TTestDetector()
-        self.detector.init(size=600, field='hotend', params={'alpha': 0.06})
+        self.detector.init(size=600, field='hotend', params={'alpha': 0.03})
         self.every = 10
 
     def test_detection(self):

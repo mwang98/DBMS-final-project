@@ -52,12 +52,6 @@ def main():
         (72000, 3.0, 0),  # at 20 hours goes back to normal
     ]
 
-    # Start from 2016-01-01 00:00:00 UTC
-    # This makes it easy to reason about the data later
-    now = datetime(2016, 1, 1)
-    second = timedelta(seconds=1)
-    epoch = datetime(1970, 1, 1)
-
     # 24 hours of temperatures once per second
     for i in range(60 * 60 * 24 + 2):
         # update sigma values
@@ -80,6 +74,8 @@ def main():
         hotend = temp(hotend_t + hotend_offset, hotend_sigma)
         bed = temp(bed_t + bed_offset, bed_sigma)
         air = temp(air_t + air_offset, air_sigma)
+        if i % 180 in list(range(55, 63)):
+            hotend *= 1.02
         point = "%s hotend=%f,bed=%f,air=%f %d" % (
             measurement,
             hotend,
@@ -88,11 +84,15 @@ def main():
             time.time()
         )
         time.sleep(1)
-        r = session.post(write_url, data=point)
+        try:
+            r = session.post(write_url, data=point)
+            if r.status_code != 204:
+                print(r.text, file=sys.stderr)
+                return 1
+        except Exception as inst:
+            print(inst)
         print(i)
-        if r.status_code != 204:
-            print(r.text, file=sys.stderr)
-            return 1
+
     return 0
 
 
